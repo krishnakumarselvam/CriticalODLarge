@@ -1,4 +1,4 @@
-function [Fsimvalue] = GetFsim(iter,HOMEDIRECTORY);
+function [Fsimvalue] = GetFsim(iter,HOMEDIRECTORY)
 
 %This function creates the aimsun file according to the changed OD Matrix
 %as per the current trial point (details of which are in currTextFile). We
@@ -17,9 +17,11 @@ fprintf(fid,['ODFileName = \''C:\\Users\\Krishna\\Dropbox\\CriticalODLarge\\Tria
 
 cd 'C:/Program Files/TSS-Transport Simulation Systems/AIMSUN 6.1/'
 !aconsole.exe -script C:/Users/Krishna/Dropbox/CriticalODLarge/PythonFiles/Create_Model.py 
+ResultFileName = ['C:\\Users\\Krishna\\Dropbox\\CriticalODLarge\\Outputs\\Iter_' num2str(iter) '.txt'];
+while ~exist(ResultFileName)
 !aconsole.exe -script C:/Users/Krishna/Dropbox/CriticalODLarge/PythonFiles/simRepAll_newMdl_newReplic.py 
-
+end
 cd (HOMEDIRECTORY)
-filecontents = textread(['C:\\Users\\Krishna\\Dropbox\\CriticalODLarge\\Outputs\\Iter_' num2str(iter) '.txt']);
+filecontents = textread(ResultFileName);
 Fsimvalue=filecontents(1,3);
 end

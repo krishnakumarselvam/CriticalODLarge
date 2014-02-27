@@ -18,20 +18,21 @@ A   = ones(1,PROBLEMDIMENSION);
 lb  = zeros(PROBLEMDIMENSION,1);
 ub  = baseODMatrix(TopODIndices,3);
 RHS = sum(ub)-NUM_VEHICLES_TO_REMOVE;
-options=optimset('Diagnostics','off','Algorithm','interior-point','Display','off','MaxFunEvals',100000000,'MaxIter',100000000,...
+options=optimset('Diagnostics','on','Algorithm','interior-point','Display','on','MaxFunEvals',100000000,'MaxIter',100000000,...
     'TolFun',10e-7,'TolCon',10e-7);
+keyboard
 CurrTrialPoint = fmincon(@obj,x_init',[],[],A,RHS,lb,ub,[],options);
 CurrTrialPoint=CurrTrialPoint';
 
 %Testing module
-% Testing = 1;
-% if(Testing)
-%     close all
-%     plot(ub,'.*r')
-%     hold on
-%     plot(x_init,'-*g')
-%     plot(CurrTrialPoint,'-*b')
-% end
-%     
+Testing = 1;
+if(Testing)
+    close all
+    plot(ub,'-*r')
+    hold on
+    plot(x_init,'-*g')
+    plot(CurrTrialPoint,'-*b')
+end
+    
 
 end

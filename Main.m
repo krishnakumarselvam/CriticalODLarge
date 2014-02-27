@@ -23,8 +23,10 @@ MAXITER = 50;
 baseODMatrix = textread('Inputs/ODpairs.txt');%Read from the Original OD pair data
 AllowedReductionPercentage = 0.25;
 NUM_VEHICLES_TO_REMOVE  = 1200; % If this value is changed, the corresponding value in GenerateRandomTrialPoints also needs to be changed
+load ('Inputs/RandomTrialPoints', 'TopODIndices');
+PROBLEMDIMENSION = length(TopODIndices);
 
-Evaluated_Points = zeros(MAXITER,size(baseODMatrix,1));
+Evaluated_Points = zeros(MAXITER,PROBLEMDIMENSION);
 Fsimvalues = zeros(MAXITER,1);
 
 %%
@@ -37,7 +39,7 @@ for iter = 1:MAXITER
 
     %Find a trial point
     %-----------------------------------------
-    [TrialPoint]=FindTrialPoint(iter,baseODMatrix,HOMEDIRECTORY,CurrBeta,Evaluated_Points,NUM_VEHICLES_TO_REMOVE);
+    [TrialPoint]=FindTrialPoint(iter,baseODMatrix,HOMEDIRECTORY,CurrBeta,Evaluated_Points,NUM_VEHICLES_TO_REMOVE,TopODIndices);
     %-----------------------------------------
     Evaluated_Points(iter,:)=TrialPoint;
 
@@ -47,7 +49,7 @@ for iter = 1:MAXITER
     Fsimvalues(iter,1) = GetFsim(iter,HOMEDIRECTORY);
     
     %Update metamodel
-    CurrBeta = UpdateMetamodel(Fsimvalues,Evaluated_Points);
+    CurrBeta = UpdateMetamodel(Fsimvalues,Evaluated_Points,PROBLEMDIMENSION);
     CurrBeta = CurrBeta';
 
 
@@ -61,6 +63,8 @@ for iter = 1:MAXITER
     %Mixture points
 
 
+    close all
+    plot(Fsimvalues(1:iter),'-*');
 end
 
 %%
